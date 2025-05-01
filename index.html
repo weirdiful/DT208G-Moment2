@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To do list</title>
+  </head>
+  <body>
+    <main>
+      <h1>Att göra</h1>
+      <form id="todo-form">
+        <input type="text" id="task-input" placeholder="Vad ska göras?" required />
+        <select id="priority-select">
+          <option value="1">Hög</option>
+          <option value="2">Mellan</option>
+          <option value="3">Låg</option>
+        </select>
+        <button type="submit">Lägg till</button>
+      </form>
+  
+      <ul id="todo-list"></ul>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
