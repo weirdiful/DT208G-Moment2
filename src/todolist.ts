@@ -1,5 +1,6 @@
-// Todo-interface
-interface Todo {
+//To-do interface
+
+export interface Todo {
   task: string;
   completed: boolean;
   priority: 1 | 2 | 3;
@@ -7,8 +8,7 @@ interface Todo {
   completedAt?: string;
 }
 
-// TodoList-klass
-class TodoList {
+export class TodoList {
   private todos: Todo[] = [];
 
   constructor() {
@@ -44,11 +44,11 @@ class TodoList {
     return [...this.todos];
   }
 
-  saveToLocalStorage(): void {
+  private saveToLocalStorage(): void {
     localStorage.setItem('todos', JSON.stringify(this.todos));
   }
 
-  loadFromLocalStorage(): void {
+  private loadFromLocalStorage(): void {
     const saved = localStorage.getItem('todos');
     if (saved) {
       try {
@@ -59,55 +59,8 @@ class TodoList {
           [1, 2, 3].includes(todo.priority)
         );
       } catch (e) {
-        console.error('Kunde inte läsa från localStorage:', e);
+        console.error('Kunde inte hämta från localStorage:', e);
       }
     }
   }
 }
-
-// DOM & app-logik
-const todoList = new TodoList();
-
-const form = document.querySelector<HTMLFormElement>('#todo-form')!;
-const taskInput = document.querySelector<HTMLInputElement>('#task-input')!;
-const prioritySelect = document.querySelector<HTMLSelectElement>('#priority-select')!;
-const todoContainer = document.querySelector<HTMLUListElement>('#todo-list')!;
-
-function renderTodos() {
-  todoContainer.innerHTML = '';
-  todoList.getTodos().forEach((todo, index) => {
-    const li = document.createElement('li');
-    li.className = todo.completed ? 'completed' : '';
-    li.innerHTML = `
-      <span>${todo.task} (prio ${todo.priority})</span>
-      ${!todo.completed ? `<button data-index="${index}">Klar</button>` : ''}
-    `;
-
-    if (!todo.completed) {
-      const button = li.querySelector('button')!;
-      button.addEventListener('click', () => {
-        todoList.markTodoCompleted(index);
-        renderTodos();
-      });
-    }
-
-    todoContainer.appendChild(li);
-  });
-}
-
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const task = taskInput.value;
-  const priority = parseInt(prioritySelect.value);
-  const added = todoList.addTodo(task, priority);
-  if (!added) {
-    alert('Ogiltiga värden! Fyll i uppgift och välj prio 1-3.');
-    return;
-  }
-
-  taskInput.value = '';
-  prioritySelect.value = '1';
-  renderTodos();
-});
-
-renderTodos();
